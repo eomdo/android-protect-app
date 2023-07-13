@@ -17,4 +17,10 @@ public:
     ~Calculator();
 };
 
+class FridaDetect {
+public:
+    int is_frida_binary();
+};
+
+
 #endif //NATIVE_TEST_CALCULATOR_H

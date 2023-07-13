@@ -3,28 +3,33 @@ package com.example.nativetest;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
-import com.example.nativetest.databinding.ActivityLoginBinding;
-import com.example.nativetest.databinding.ActivityMainBinding;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class LoginActivity extends AppCompatActivity {
     private EditText et_id, et_pass;
     private Button btn_login, btn_register;
+    private Timer timerCall;
+    private int nCnt;
 
     static {
         System.loadLibrary("nativetest");
@@ -32,21 +37,21 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-
-//        RootCheck();
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        //Detect Logic start===============================================
+        nCnt = 0;
+        TimerTask timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                androidDetect();
+            }
+        };
 
-        com.example.nativetest.databinding.ActivityLoginBinding binding = ActivityLoginBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
-
-
-        TextView tv = binding.sampleText;
-        tv.setText(stringFromJNI());
-
+        timerCall = new Timer();
+        timerCall.schedule(timerTask, 0, 3000);
+        //Detect Logic End===============================================
 
         et_id = findViewById(R.id.et_id);
         et_pass = findViewById(R.id.et_pass);
@@ -82,13 +87,13 @@ public class LoginActivity extends AppCompatActivity {
                                 String userID = jsonObject.getString("userID");
                                 String userPass = jsonObject.getString("userPassword");
 
-                                Toast.makeText(getApplicationContext(),"로그인에 성공하였습니다.",Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(), "로그인에 성공하였습니다.", Toast.LENGTH_SHORT).show();
                                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                 intent.putExtra("userID", userID);
                                 intent.putExtra("userPass", userPass);
                                 startActivity(intent);
                             } else { // 로그인에 실패한 경우
-                                Toast.makeText(getApplicationContext(),"로그인에 실패하였습니다.",Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(), "로그인에 실패하였습니다.", Toast.LENGTH_SHORT).show();
                                 return;
                             }
                         } catch (JSONException e) {
@@ -101,6 +106,31 @@ public class LoginActivity extends AppCompatActivity {
                 queue.add(loginRequest);
             }
         });
+
+
+    }
+
+    private void androidDetect() {
+        Log.d("[info]", nCnt++ + " - Run Android Detect");
+        Handler mHandler = new Handler(Looper.getMainLooper());
+
+
+        mHandler.postDelayed(new Runnable() {
+            int is_exit = 0;
+            @Override
+            public void run() {
+//                if (RootCheck()) {
+//                    is_exit++;
+//                }
+
+                detectFrida();
+
+                if (is_exit != 0) {
+                    timerCall.cancel();
+                    System.exit(0);
+                }
+            }
+        }, 1000);
 
 
     }
@@ -148,7 +178,8 @@ public class LoginActivity extends AppCompatActivity {
         return false;
     }
 
-    public void RootCheck() {
+    public boolean RootCheck() {
+        final boolean[] is_root = {false};
         if (chk_root2() || chk_root3()) {
 
             androidx.appcompat.app.AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -156,11 +187,30 @@ public class LoginActivity extends AppCompatActivity {
             builder.setMessage("변경된 OS(루팅)의 기기는 사용이 제한됩니다.");
             builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int whichButton) {
-                    System.exit(0);
+//                    System.exit(0);
                 }
             }).setCancelable(false).show();
+            return true;
+        } else {
+            return false;
         }
     }
 
-    public native String stringFromJNI();
+//    public void detectFrida() {
+////        if (detectFrida()) {
+////
+////            androidx.appcompat.app.AlertDialog.Builder builder = new AlertDialog.Builder(this);
+////            builder.setTitle("종료");
+////            builder.setMessage("변경된 OS(루팅)의 기기는 사용이 제한됩니다.");
+////            builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+////                public void onClick(DialogInterface dialog, int whichButton) {
+////                    System.exit(0);
+////                }
+////            }).setCancelable(false).show();
+////        }
+//
+//    }
+//
+//
+    public native String detectFrida();
 }

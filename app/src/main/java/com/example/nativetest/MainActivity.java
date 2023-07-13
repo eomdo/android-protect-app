@@ -21,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         // Example of a call to a native method
-        TextView tv = binding.sampleText;
+        TextView tv = binding.deeplinkButton;
         tv.setText(stringFromJNI());
     }
 
