@@ -12,31 +12,36 @@ import android.widget.TextView;
 import com.example.nativetest.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
-    private Button btn_deeplink;
+    private Button btn_urilink;
+    private Button btn_applink;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        btn_deeplink = findViewById(R.id.btn_deeplink);
+        btn_urilink = findViewById(R.id.btn_urilink);
+        btn_applink = findViewById(R.id.btn_applink);
 
-
-        // 회원가입 버튼을 클릭 시 수행
-        btn_deeplink.setOnClickListener(new View.OnClickListener() {
+        btn_urilink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Intent intent = new Intent(MainActivity.this, com.example.nativetest.RegisterActivity.class);
-//                startActivity(intent);
-                String url ="abc://def";
-                Intent intent = new Intent(MainActivity.this, Uri.parse(url).getClass());
+                String urlScheme = "market://details?id=youtube";
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(urlScheme));
                 startActivity(intent);
+                finish();
+            }
+        });
+
+        btn_applink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String srchString = "test";
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.google.com/search?q=" + srchString));
+                startActivity(intent);
+                finish();
             }
         });
     }
 
-    /**
-     * A native method that is implemented by the 'nativetest' native library,
-     * which is packaged with this application.
-     */
 }

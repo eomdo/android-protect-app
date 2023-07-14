@@ -65,13 +65,24 @@
         app:layout_constraintTop_toBottomOf="@+id/tv_id" />
 
     <Button
-        android:id="@+id/btn_deeplink"
+        android:id="@+id/btn_urilink"
         android:layout_width="181dp"
         android:layout_height="64dp"
         android:layout_marginTop="32dp"
-        android:text="Click"
+        android:text="App OPEN"
         app:layout_constraintEnd_toEndOf="@+id/textView3"
         app:layout_constraintStart_toStartOf="@+id/textView3"
         app:layout_constraintTop_toBottomOf="@+id/textView3" />
+
+    <Button
+        android:id="@+id/btn_applink"
+        android:layout_width="181dp"
+        android:layout_height="64dp"
+        android:layout_marginTop="4dp"
+        android:text="Web OPEN"
+        app:layout_constraintEnd_toEndOf="@+id/btn_urilink"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/btn_urilink"
+        app:layout_constraintTop_toBottomOf="@+id/btn_urilink" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
