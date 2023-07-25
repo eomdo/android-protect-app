@@ -36,8 +36,8 @@ public class MainActivity extends AppCompatActivity {
         btn_applink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String srchString = "test";
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.google.com/search?q=" + srchString));
+                // String srchString = "test";
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.naver.com"));
                 startActivity(intent);
                 finish();
             }
