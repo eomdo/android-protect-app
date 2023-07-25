@@ -78,7 +78,6 @@ public class LoginActivity extends AppCompatActivity {
                 Response.Listener<String> responseListener = new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Toast.makeText(getApplicationContext(), "연결 실패 하였습니다.", Toast.LENGTH_SHORT).show();
                         try {
                             // TODO : 인코딩 문제때문에 한글 DB인 경우 로그인 불가
                             System.out.println("hongchul" + response);
